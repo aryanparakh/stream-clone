@@ -50,12 +50,13 @@ export async function signup(req, res) {
       expiresIn: "7d",
     });
 
-    res.cookie("jwt", token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true, // prevent XSS attacks,
-      sameSite: "strict", // prevent CSRF attacks
-      secure: process.env.NODE_ENV === "production",
-    });
+   res.cookie("jwt", token, {
+  httpOnly: true, // prevents JS access
+  secure: process.env.NODE_ENV === "production", // only over HTTPS in production
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // allow cross-site cookies in prod
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+});
+
 
     res.status(201).json({ success: true, user: newUser });
   } catch (error) {
@@ -83,11 +84,12 @@ export async function login(req, res) {
     });
 
     res.cookie("jwt", token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000,
-      httpOnly: true, // prevent XSS attacks,
-      sameSite: "strict", // prevent CSRF attacks
-      secure: process.env.NODE_ENV === "production",
-    });
+  httpOnly: true, // prevents JS access
+  secure: process.env.NODE_ENV === "production", // only over HTTPS in production
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax", // allow cross-site cookies in prod
+  maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+});
+
 
     res.status(200).json({ success: true, user });
   } catch (error) {
