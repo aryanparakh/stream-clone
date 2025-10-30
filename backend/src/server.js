@@ -15,9 +15,10 @@ const PORT = process.env.PORT;
 
 const __dirname = path.resolve();
 
-app.use(
-  cors({
-    origin: "https://stream-clone-tau.vercel.app",
+const BASE_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:5001/api"
+    : "https://stream-clone-2zfi.vercel.app/api";
     credentials: true, // allow frontend to send cookies
   })
 );
